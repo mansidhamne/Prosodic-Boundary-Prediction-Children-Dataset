@@ -89,6 +89,8 @@ If you use this dataset or build upon this work, please cite:
 For questions about this dataset or research collaboration:
 
 - **Mansi Dhamne**: mansi.dhamne22@spit.ac.in
+- **Sneha Raman**: sneha.r30@gmail.com
+- **Preeti Rao**: prao@ee.iitb.ac.in
 
 ## Acknowledgments
 
