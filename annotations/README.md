@@ -20,9 +20,9 @@ The stories are sourced from the **English 400 Reading Programme** by the Depart
 ## File Structure
 
 The dataset is divided into three batches:
-- `data/Batch-1.csv` - 18 stories (3 from each grade)
-- `data/Batch-2.csv` - 18 stories (3 from each grade) 
-- `data/Batch-3.csv` - 18 stories (3 from each grade)
+- `annotations/Masked Dataset - Batch 1.csv` - 18 stories (3 from each grade)
+- `annotations/Masked Dataset - Batch 2.csv` - 18 stories (3 from each grade) 
+- `annotations/Masked Dataset - Batch 3.csv` - 18 stories (3 from each grade)
 
 ## Data Format
 
@@ -33,8 +33,10 @@ Each CSV file contains the following columns:
 | `Mask` | Semantically masked word |
 | `StoryID` | Unique identifier for the story |
 | `TokenID` | Individual word/token in the story |
-| `Annotator_Agreement` | Agreement score across annotators |
 | `R1` through `R7` | Individual annotator markings |
+| `GT` | Agreement score across annotators |
+| `GT_isboundary` | Presence of prosodic boundary (GT>=5) |
+| `GT_boundary_forbidden` | Presence of forbidden pause (GT=0) |
 
 ### Annotation Schema
 
@@ -43,13 +45,13 @@ Each CSV file contains the following columns:
 
 ### Example Data Rows
 
-| Mask | StoryID | TokenID | Annotator_Agreement | R1 | R2 | R3 | R4 | R5 | R6 | R7 |
-|------|---------|---------|---------------------|----|----|----|----|----|----|----|
-| The  | G3S1 | G3010001 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| <entity_bird> | G3S1 | G3010002 | 2 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
-| has | G3S1 | G3010003 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| <adjective_look>  | G3S1 | G3010004 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| feathers.  | G3S1 | G3010005 | 7 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| Mask | StoryID | TokenID | R1 | R2 | R3 | R4 | R5 | R6 | R7 | GT | GT_isboundary | GT_boundary_forbidden |
+|------|---------|---------|----|----|----|----|----|----|----|----|---------------|-----------------------|
+| The  | G3S1 | G3010001 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| <entity_bird> | G3S1 | G3010002 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 1 |
+| has | G3S1 | G3010003 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| <adjective_look>  | G3S1 | G3010004 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| feathers.  | G3S1 | G3010005 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 7 | 1 | 0 |
 
 ## Annotation Guidelines
 
@@ -84,6 +86,13 @@ If you use this dataset in your research, please cite:
   year={2025},
   note={Based on English 400 Reading Programme by CIEFL},
   url={https://github.com/mansidhamne/Prosodic-Boundary-Prediction-Children-Texts}
+}
+@inproceedings{
+  dhamne2025predicting,
+  title={Predicting Prosodic Boundaries for Children{\textquoteright}s Texts},
+  author={Mansi Dhamne and Sneha Raman and Preeti Rao},
+  booktitle={The 2025 Conference on Empirical Methods in Natural Language Processing},
+  year={2025}
 }
 ```
 
