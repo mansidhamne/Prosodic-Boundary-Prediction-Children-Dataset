@@ -1,96 +1,114 @@
-# Prosodic Phrase Annotated Dataset for Children
+# Extracted Features Dataset for Prosodic Boundary Prediction for Children's Text
 
-This dataset contains prosodic phrase annotations for children's reading materials, designed to identify natural pause locations for read-aloud scenarios.
+This document describes the features extracted for prosodic boundary prediction in children's reading materials. The features are organized into several categories that capture different aspects of linguistic structure and cognitive processing.
 
-## Dataset Overview
+**Note:** These features correspond directly to the annotation data in the [data](data/README.md) folder. Each row in this features CSV can be matched to the prosodic boundary annotations using the StoryID and TokenID columns, which are consistent across both datasets.
 
-- **Total Stories**: 54 stories
-- **Grade Range**: Grade 3 to Grade 8 
-- **Stories per Grade**: 9 stories each (6 grades × 9 stories = 54 total)
-- **Batches**: 3 CSV files, each containing 18 stories (3 stories from each grade)
-- **Annotators**: 7 annotators per batch and per story (21 total annotators)
-- **Target Audience**: Children aged 6-12
 
-## Data Source
+## Dataset Structure
 
-The stories are sourced from the **English 400 Reading Programme** by the Department of Materials Production, Central Institute of English and Foreign Languages (CIEFL). The programme uses a carefully researched vocabulary list prepared by language learning experts.
+Each row in the features CSV represents a single word/token with its extracted features:
 
-**Original Source**: https://www.orientblackswan.com/books?id=0&pid=0&sid=40
+```
+StoryID,TokenID,GT,GT_isboundary,GT_boundary_forbidden,[feature_columns...]
+```
 
-## File Structure
+## Feature Categories
 
-The dataset is divided into three batches:
-- `data/Batch-1.csv` - 18 stories (3 from each grade)
-- `data/Batch-2.csv` - 18 stories (3 from each grade) 
-- `data/Batch-3.csv` - 18 stories (3 from each grade)
+Alh the features and their purpose is explained in detail in the paper.
 
-## Data Format
+### Core Identification Features
 
-Each CSV file contains the following columns:
+| Column | Description | Example Values |
+|--------|-------------|----------------|
+| `StoryID` | Unique identifier for the story | G7S1 |
+| `TokenID` | Unique identifier for the token within story | G7010001 |
+| `GT` | Number of annotators (0-7) who marked a pause after this word | 0, 3, 7 |
+| `GT_isboundary` | Labeled 1 (boundary) if more than 5 annotators mark it as a boundary; otherwise, it is labeled 0 | 1, 0 |
+| `GT_boundary_forbidden` | Labeled 1 (forbidden pause) if no annotators mark it as a boundary; otherwise, it is labeled 0 | 1, 0 |
 
-| Column | Description |
-|--------|-------------|
-| `Mask` | Semantically masked word |
-| `StoryID` | Unique identifier for the story |
-| `TokenID` | Individual word/token in the story |
-| `Annotator_Agreement` | Agreement score across annotators |
-| `R1` through `R7` | Individual annotator markings |
+### Lexical Features
 
-### Annotation Schema
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `is_last` | Binary flag indicating if word is last in sentence | Boolean | TRUE/FALSE |
+| `word_length` | Number of characters in the word | Integer | 5 |
+| `is_capitalized` | Whether word begins with capital letter | Boolean | TRUE/FALSE |
+| `is_function_word` | Binary flag for function words (pronouns, determiners, conjunctions) | Boolean | TRUE/FALSE |
+| `raw_frequency` | Frequency of word in the dataset | Integer | 35 |
+| `language_model_score` | BERT likelihood score for word predictability | Float | -2.127 |
 
-- **0**: No pause (continue reading)
-- **1**: Pause (end of prosodic phrase)
+### Semantic Features (Word Embeddings)
 
-### Example Data Rows
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `cluster_id` | K-means cluster ID of word's reduced BERT embedding | Integer | 16 |
 
-| Mask | StoryID | TokenID | Annotator_Agreement | R1 | R2 | R3 | R4 | R5 | R6 | R7 |
-|------|---------|---------|---------------------|----|----|----|----|----|----|----|
-| The  | G3S1 | G3010001 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| <entity_bird> | G3S1 | G3010002 | 2 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
-| has | G3S1 | G3010003 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| <adjective_look>  | G3S1 | G3010004 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| feathers.  | G3S1 | G3010005 | 7 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+### POS and Syntactic Features
 
-## Annotation Guidelines
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `pos_tag` | Part-of-speech tag | Text | PRON, VERB, NOUN |
+| `dep_tag` | Dependency label | Text | nsubj, root, det |
+| `tag` | Fine-grained morphological POS tag | Text | PRP, VBD, DT |
 
-Annotators were instructed to mark pauses at locations where they would naturally pause when **reading aloud to children aged 6-12**. The annotations capture prosodic phrase boundaries that facilitate comprehension and natural speech rhythm in educational read-aloud contexts.
+### Syntactic Structure Features
 
-## Data Privacy and Masking
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `tree_depth` | Depth in dependency tree | Integer | 3 |
+| `tree_width` | Width of syntactic subtree | Integer | 5 |
+| `depth_in_tree` | Depth in constituency tree | Integer | 4 |
+| `distance_from_root` | Distance from root in dependency tree | Integer | 2 |
+| `smallest_constituent_label` | Label of smallest syntactic constituent | Text | NP, VP, PP |
+| `smallest_constituent_length` | Length of smallest constituent | Integer | 2 |
+| `is_constituent_chunk_end` | Whether word ends a syntactic chunk | Boolean | TRUE/FALSE |
+| `distance_from_phrase_head` | Dependency hops from phrase head | Integer | 1 |
+| `forward_position` | Position within constituent (from start) | Integer | 0 |
+| `backward_position` | Position within constituent (from end) | Integer | 1 |
+| `min_span_tree_label_with_next` | Minimal spanning tree label to next word | Text | S, VP |
+| `min_span_tree_length_with_next` | Length of minimal spanning tree to next word | Integer | 3 |
 
-**⚠️ Important Disclaimer**: The original words have been semantically masked using placeholder tokens (e.g., `<object>`, `<character>`, `<action>`). As a result:
+### Positional Features
 
-- Word length features may not exactly match original text
-- Syllable count features may not exactly match original text  
-- Semantic relationships are preserved through consistent placeholder categories
-- The dataset maintains prosodic structure while protecting original content
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `sentence_position` | Absolute word index in sentence (0-based) | Integer | 0, 5, 12 |
+| `sentence_length` | Total words in sentence | Integer | 15 |
 
-## Use Cases
+### Physiological Features (Child-Specific)
 
-This dataset is suitable for research in:
-- Prosodic phrase boundary prediction
-- Text-to-speech systems for educational content
-- Reading comprehension tools
-- Child-oriented speech synthesis
-- Educational technology applications
+| Column | Description | Type | Example |
+|--------|-------------|------|---------|
+| `num_syllables` | Number of syllables in current word | Integer | 2 |
+| `syllables_since_last_major_boundary_child` | Syllables accumulated since last major boundary | Integer | 4 |
+| `syllables_remaining_till_breath_child` | Syllables remaining to reach breath threshold (7 syllables) | Integer | 3 |
+| `breath_pause_flag_child` | Whether breath threshold has been reached | Boolean | TRUE/FALSE |
+
+## Missing Values
+
+Some features may have missing values (represented as empty cells) when:
+- Syntactic parsing fails for complex structures
+- Word is at sentence/document boundaries (no previous/next context)
+- Constituency parsing produces incomplete trees
+
+## Usage Notes
+
+- All boolean features use TRUE/FALSE values
+- Numeric features are not normalized - apply scaling as needed for your model
+- The `_child` suffix on physiological features indicates they're calibrated for children aged 6-12
+- Features are extracted using [spaCy](https://spacy.io/) and [Berkeley Natural Parser Usage](https://github.com/nikitakit/self-attentive-parser/tree/master) for POS/dependency parsing and custom algorithms for syntactic structure.
 
 ## Citation
 
-If you use this dataset in your research, please cite:
+If you use these features in your research, please cite the original paper:
 
 ```bibtex
-@dataset{prosodic_phase_annotation_for_children_2025,
-  title={Prosodic Boundary Prediction Children Texts},
-  author={Mansi Dhamne, Sneha Raman, Preeti Rao},
-  year={2025},
-  note={Based on English 400 Reading Programme by CIEFL},
-  url={https://github.com/mansidhamne/Prosodic-Boundary-Prediction-Children-Texts}
+@inproceedings{
+  dhamne2025predicting,
+  title={Predicting Prosodic Boundaries for Children{\textquoteright}s Texts},
+  author={Mansi Dhamne and Sneha Raman and Preeti Rao},
+  booktitle={The 2025 Conference on Empirical Methods in Natural Language Processing},
+  year={2025}
 }
 ```
-
-## Contact
-
-For questions about this dataset, please contact: [mansiadhamne@gmail.com]
-
----
-
-**Acknowledgments**: We thank the Central Institute of English and Foreign Languages (CIEFL) for developing the original English 400 Reading Programme materials that form the basis of this annotation dataset.
