@@ -32,6 +32,7 @@ Alh the features and their purpose is explained in detail in the paper.
 | Column | Description | Type | Example |
 |--------|-------------|------|---------|
 | `is_last` | Binary flag indicating if word is last in sentence | Boolean | TRUE/FALSE |
+| `followed_by_punct` | Integer indicating the type of punctuation that follows the word (if any) |  Integer | 0-7 |
 | `word_length` | Number of characters in the word | Integer | 5 |
 | `is_capitalized` | Whether word begins with capital letter | Boolean | TRUE/FALSE |
 | `is_function_word` | Binary flag for function words (pronouns, determiners, conjunctions) | Boolean | TRUE/FALSE |
@@ -42,15 +43,17 @@ Alh the features and their purpose is explained in detail in the paper.
 
 | Column | Description | Type | Example |
 |--------|-------------|------|---------|
-| `cluster_id` | K-means cluster ID of word's reduced BERT embedding | Integer | 16 |
+| `cluster_id` | K-means cluster ID of word's reduced BERT embedding | Integer | 2 |
+| prev_cluster_id, next_cluster_id | K-means cluster ID of neighbouring words | Integer | 4 |
 
-### POS and Syntactic Features
+### POS Features
 
 | Column | Description | Type | Example |
 |--------|-------------|------|---------|
 | `pos_tag` | Part-of-speech tag | Text | PRON, VERB, NOUN |
 | `dep_tag` | Dependency label | Text | nsubj, root, det |
 | `tag` | Fine-grained morphological POS tag | Text | PRP, VBD, DT |
+| `prev_(1,2,3)_pos`, `prev_(1,2,3)_dep`, `next_(1,2,3)_pos`, `next_(1,2,3)_dep` | POS tag and dependency label of neighbouring words upto a context window of 3 tokens | Text | PRON, VERB, NOUN, root, det |
 
 ### Syntactic Structure Features
 
@@ -83,7 +86,6 @@ Alh the features and their purpose is explained in detail in the paper.
 | `num_syllables` | Number of syllables in current word | Integer | 2 |
 | `syllables_since_last_major_boundary_child` | Syllables accumulated since last major boundary | Integer | 4 |
 | `syllables_remaining_till_breath_child` | Syllables remaining to reach breath threshold (7 syllables) | Integer | 3 |
-| `breath_pause_flag_child` | Whether breath threshold has been reached | Boolean | TRUE/FALSE |
 
 ## Missing Values
 
