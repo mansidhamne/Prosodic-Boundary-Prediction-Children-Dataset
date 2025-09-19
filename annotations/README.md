@@ -9,7 +9,7 @@ This dataset contains prosodic phrase annotations for children's reading materia
 - **Stories per Grade**: 9 stories each (6 grades × 9 stories = 54 total)
 - **Batches**: 3 CSV files, each containing 18 stories (3 stories from each grade)
 - **Annotators**: 7 annotators per batch and per story (21 total annotators)
-- **Target Audience**: Children aged 6-12
+- **Target Audience**: Children aged 8-13
 
 ## Data Source
 
@@ -55,7 +55,15 @@ Each CSV file contains the following columns:
 
 ## Annotation Guidelines
 
-Annotators were instructed to mark pauses at locations where they would naturally pause when **reading aloud to children aged 6-12**. The annotations capture prosodic phrase boundaries that facilitate comprehension and natural speech rhythm in educational read-aloud contexts.
+Annotators were instructed to mark pauses at locations where they would naturally pause when **reading aloud to children aged 8-13**. The annotations capture prosodic phrase boundaries that facilitate comprehension and natural speech rhythm in educational read-aloud contexts.
+
+#### Preview of the Annotation Tool used: 
+
+<img width="500" height="500" alt="Screenshot 2025-05-18 at 2 27 36 AM" src="https://github.com/user-attachments/assets/aa79852b-5947-4e99-91b5-3413fd591049" />
+<img width="500" height="500" alt="Screenshot 2025-05-18 at 2 26 23 AM" src="https://github.com/user-attachments/assets/ff53f7b5-21e5-4cf4-b6d9-83931b4f9261" />
+<img width="500" height="500" alt="Screenshot 2025-05-18 at 2 26 47 AM" src="https://github.com/user-attachments/assets/67a35f42-5fe9-44c5-803c-1d5ee7cc320b" />
+
+
 
 ## Data Privacy and Masking
 
